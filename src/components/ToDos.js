@@ -4,33 +4,27 @@ import AddToDo from './AddToDo';
 import ToDo from './ToDo';
 import Grid from '@material-ui/core/Grid';
 
-const toDos = 
-  [
-    {
-    "date": "19/05/2019",
-    "title": "Heading",
-    "content": "Lorem Ipsum"
-    },
-    {
-      "date": "18/05/2019",
-      "title": "Heading 2",
-      "content": "Lorem Ipsum 2"
-    }
-  ];
-
 
 
 class ToDos extends Component {
   constructor(props) {
     super(props);
     this.addToDo = this.addToDo.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
     this.state = {
-      toDos: toDos
+      toDos: []
     }
   }
+  deleteItem(el) {
+    const key = el.dataKey;
+
+    const newState = this.state.toDos.filter((el, i) => i !== key)
+
+    this.setState({toDos: newState});
+  }
   addToDo(toDoItem) {
-    const updateToDos = [...this.state.toDos, toDoItem];
-    this.setState({'toDos': updateToDos})
+    const updateToDos = toDoItem;
+    this.setState({'toDos': [...this.state.toDos, updateToDos]})
   }
   render() {
     return (
@@ -44,8 +38,8 @@ class ToDos extends Component {
           <AddToDo onAddToDo={this.addToDo}></AddToDo>
         </Grid>
         <Grid item xs={12}>
-          {this.state.toDos.map((toDo, i) => 
-            <ToDo toDo={toDo} key={i}></ToDo>
+          {this.state.toDos.map((toDo, index) => 
+            <ToDo toDo={toDo} key={index} dataKey={index} handleDelete={this.deleteItem}></ToDo>
           )}
         </Grid>
       </Grid>
